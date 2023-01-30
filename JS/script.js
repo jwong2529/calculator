@@ -7,6 +7,7 @@ instead of concatenating values, use arrays
 
 const numbers = document.querySelectorAll(".numbers");
 const operator = document.querySelectorAll(".operator");
+const decimal = document.querySelector(".decimal");
 const equationDisplay = document.querySelector(".top-half");
 const currentDisplay = document.querySelector(".bottom-half");
 const acButton = document.querySelector(".AC");
@@ -40,6 +41,19 @@ numbers.forEach(num => num.addEventListener("click", function() {
         updateCurrentDisplay(equationStorage[2]);
     }
 }));
+
+decimal.addEventListener("click", function() {
+    if (!currentDisplay.textContent.includes('.')) {
+        if (equationStorage[1] === undefined) {
+            equationStorage[0] += '.';
+            updateCurrentDisplay(equationStorage[0]);
+        }
+        else {
+            equationStorage[2] += '.';
+            updateCurrentDisplay(equationStorage[2]);
+        }
+    }
+});
 
 function updateCurrentDisplay(numbers) {
     //using regEx
