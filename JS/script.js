@@ -192,6 +192,9 @@ function multiply() {
 }
 
 function divide() {
+    if (equationStorage[2] === '0') {
+        return "CANNOT DIVIDE BY 0";
+    }
     return divideCalc = parseFloat(equationStorage[0]) / parseFloat(equationStorage[2]);
 }
 
