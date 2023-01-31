@@ -1,8 +1,4 @@
 
-/*
-IDEAS:
-pressing equal sign clears current display storage and equation?
-\*/
 
 const numbers = document.querySelectorAll(".numbers");
 const operator = document.querySelectorAll(".operator");
@@ -26,26 +22,36 @@ currentDisplay.textContent = equationStorage[0];
 
 //updates current display when numbers are clicked
 numbers.forEach(num => num.addEventListener("click", function() {
-    if (equationStorage[1] === undefined) {
-        equationStorage[0] += num.textContent;
-        updateCurrentDisplay(equationStorage[0]);
-    }
-    else {
-        equationStorage[2] += num.textContent;
-        updateCurrentDisplay(equationStorage[2]);
-    }
+    displayNumbers(num.textContent);
 }));
 
-decimal.addEventListener("click", function() {
+function displayNumbers(num) {
     if (equationStorage[1] === undefined) {
-        equationStorage[0] += '.';
+        equationStorage[0] += num;
         updateCurrentDisplay(equationStorage[0]);
     }
     else {
-        equationStorage[2] += '.';
+        equationStorage[2] += num;
         updateCurrentDisplay(equationStorage[2]);
     }
-});
+}
+
+decimal.addEventListener("click", displayDecimal);
+
+function displayDecimal() {
+    if (equationStorage[1] === undefined) {
+        if (!equationStorage[0].includes('.')) {
+            equationStorage[0] += '.';
+            updateCurrentDisplay(equationStorage[0]);
+        }
+    }
+    else {
+        if (!equationStorage[2].includes('.')) {
+            equationStorage[2] += '.';
+            updateCurrentDisplay(equationStorage[2]);
+        }
+    }
+}
 
 function updateCurrentDisplay(numbers) {
     //using regEx
@@ -59,10 +65,6 @@ function updateCurrentDisplay(numbers) {
 //clears current display
 acButton.addEventListener("click", clearCurrentDisplay);
 function clearCurrentDisplay() {
-    // currentDisplayStorage = 0;
-    // currentDisplay.textContent = 0;
-    // equationDisplay.textContent = "";
-    // equationDisplayStorage = "";
     equationStorage[0] = '0';
     equationStorage[1] = undefined;
     equationStorage[2] = "";
@@ -72,6 +74,7 @@ function clearCurrentDisplay() {
 
 //deletes last entry
 delButton.addEventListener("click", deleteLastEntry);
+
 function deleteLastEntry() {
     if (equationStorage[1] === undefined) {
         equationStorage[0] = equationStorage[0].slice(0, -1);
@@ -83,19 +86,22 @@ function deleteLastEntry() {
     }
 }
 
+
 //listens for when operators are clicked
 operator.forEach(op => op.addEventListener("click", function() {
-    equationStorage[1] = op.textContent;
-    updateEquationDisplay();
+    displayOperator(op.textContent);
 }));
+
+function displayOperator(op) {
+    equationStorage[1] = op;
+    updateEquationDisplay();
+}
 
 function updateEquationDisplay() {
     //checks leading zeroes
-    // if (equationStorage[0][0] === "0" && equationStorage[0].length > 1) {
     if (equationStorage[0][0] === "0" && equationStorage[0][1] >= 0) {
         equationStorage[0] = equationStorage[0].replace('0', "");
     }
-    // if (equationStorage[2][0] === "0" && equationStorage[2].length > 1) {
     if (equationStorage[2][0] === "0" && equationStorage[2][1] >= 0) {
         equationStorage[2] = equationStorage[2].replace('0', "");
     }
@@ -103,15 +109,14 @@ function updateEquationDisplay() {
 }
 
 //listens for when equal sign is clicked
-//SHOULD PROBABLY CHECK IF BOTH EQUATION[0] AND [1] HAVE NUMBERS
+equalSign.addEventListener("click", displayEqual);
 
-equalSign.addEventListener("click", function() {
+function displayEqual() {
     equationStorage[3] = '=';
     updateEquationDisplay();
     operate();
     equationStorage[3] = "";
-});
-
+}
 function operate() {
     if (equationStorage[1] === '+') {
         currentDisplay.textContent = add();
@@ -147,3 +152,36 @@ function multiply() {
 function divide() {
     return divideCalc = parseFloat(equationStorage[0]) / parseFloat(equationStorage[2]);
 }
+
+// KEYBOARD SUPPORT
+
+document.addEventListener('keydown', (event) => {
+    let key = event.key;
+    if (event.key >= 0) {
+        displayNumbers(event.key);
+    }
+    if (event.key === '.') {
+        displayDecimal();
+    }
+    if (event.key === "Backspace") {
+        deleteLastEntry();
+    }
+    if (event.key === '+') {
+        displayOperator('+');
+    }
+    if (event.key === '-') {
+        displayOperator('−');
+    }
+    if (event.key === 'x') {
+        displayOperator('×');
+    }
+    if (event.key === '/') {
+        displayOperator('÷')
+    }
+    if (event.key === 'Enter') {
+        displayEqual();
+    }
+    if(event.key === '=') {
+        displayEqual();
+    }
+})
