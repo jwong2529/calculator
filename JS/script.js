@@ -110,8 +110,10 @@ equalSign.addEventListener("click", displayEqual);
 function displayEqual() {
     equationStorage[3] = '=';
     updateEquationDisplay();
-    operate();
+    operate();  
     equationStorage[3] = "";
+    equationStorage[1] = undefined; //ADDED THIS
+    equationStorage[0] = currentDisplay.textContent; //idk
 }
 
 //listens for when negative sign is clicked
@@ -144,10 +146,19 @@ operator.forEach(op => op.addEventListener("click", function() {
     displayOperator(op.textContent);
 }));
 function displayOperator(op) {
-    equationStorage[1] = op;
-    updateEquationDisplay();
+    if (equationStorage[1] === undefined || equationStorage[1] === '') {
+        equationStorage[1] = op;
+        updateEquationDisplay();
+    }
+    //for executing consecutive mathematic operations
+    else {
+        operate()
+        equationStorage[1] = op;
+        updateEquationDisplay();
+        equationStorage[0] = currentDisplay.textContent; 
+    }
 }
-function operate() {
+function operate() {   
     if (equationStorage[1] === '+') {
         currentDisplay.textContent = add();
         equationStorage[0] = add();
@@ -215,3 +226,5 @@ document.addEventListener('keydown', (event) => {
         displayEqual();
     }
 })
+
+

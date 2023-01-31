@@ -85,11 +85,14 @@ button:hover{
 }
 
 .display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     min-height: 124px;
     font-family: 'Rajdhani', sans-serif;
-    font-weight: bolder;
+    /* font-weight: bolder; */
     padding: 10px 20px;
-    font-size: 40px;
+    /* font-size: 40px; */
     text-align: end;
     width: 100%;
     box-sizing: border-box;
@@ -104,8 +107,13 @@ button:hover{
     border: 1px solid rgba(18, 17, 17, 0.3);
 }
 
-.top-half,
+.top-half {
+    font-size: 25px;
+    min-height: 25px;
+}
 .bottom-half {
+    font-size: 40px;
+    font-weight: bolder;
     min-height: 45px;
 }
 
