@@ -9,14 +9,12 @@ const acButton = document.querySelector(".AC");
 const delButton = document.querySelector(".DEL");
 const equalSign = document.querySelector(".equal-sign");
 
-const maxNumbers = 18;
-
+//default settings
 let equationStorage = [];
 equationStorage[0] = '0';
 equationStorage[1] = undefined;
 equationStorage[2] = "";
 equationStorage[3] = "";
-
 currentDisplay.textContent = equationStorage[0];
 
 
@@ -24,7 +22,6 @@ currentDisplay.textContent = equationStorage[0];
 numbers.forEach(num => num.addEventListener("click", function() {
     displayNumbers(num.textContent);
 }));
-
 function displayNumbers(num) {
     if (equationStorage[1] === undefined) {
         equationStorage[0] += num;
@@ -36,10 +33,11 @@ function displayNumbers(num) {
     }
 }
 
+//updates current display when decimal is clicked
 decimal.addEventListener("click", displayDecimal);
-
 function displayDecimal() {
     if (equationStorage[1] === undefined) {
+        //prevents user from inputting multiple decimals
         if (!equationStorage[0].includes('.')) {
             equationStorage[0] += '.';
             updateCurrentDisplay(equationStorage[0]);
@@ -64,6 +62,7 @@ function updateCurrentDisplay(numbers) {
 
 //clears current display
 acButton.addEventListener("click", clearCurrentDisplay);
+//reset to default settings
 function clearCurrentDisplay() {
     equationStorage[0] = '0';
     equationStorage[1] = undefined;
@@ -72,9 +71,8 @@ function clearCurrentDisplay() {
     equationDisplay.textContent = "";
 }
 
-//deletes last entry
+//deletes last entry and updates display
 delButton.addEventListener("click", deleteLastEntry);
-
 function deleteLastEntry() {
     if (equationStorage[1] === undefined) {
         equationStorage[0] = equationStorage[0].slice(0, -1);
@@ -84,17 +82,6 @@ function deleteLastEntry() {
         equationStorage[2] = equationStorage[2].slice(0, -1);
         updateCurrentDisplay(equationStorage[2]);
     }
-}
-
-
-//listens for when operators are clicked
-operator.forEach(op => op.addEventListener("click", function() {
-    displayOperator(op.textContent);
-}));
-
-function displayOperator(op) {
-    equationStorage[1] = op;
-    updateEquationDisplay();
 }
 
 function updateEquationDisplay() {
@@ -110,12 +97,20 @@ function updateEquationDisplay() {
 
 //listens for when equal sign is clicked
 equalSign.addEventListener("click", displayEqual);
-
 function displayEqual() {
     equationStorage[3] = '=';
     updateEquationDisplay();
     operate();
     equationStorage[3] = "";
+}
+
+//listens for when operators are clicked
+operator.forEach(op => op.addEventListener("click", function() {
+    displayOperator(op.textContent);
+}));
+function displayOperator(op) {
+    equationStorage[1] = op;
+    updateEquationDisplay();
 }
 function operate() {
     if (equationStorage[1] === '+') {
@@ -134,6 +129,7 @@ function operate() {
         currentDisplay.textContent = divide();
         equationStorage[0] = divide();
     }
+    //resets second part of equation to allow for continuous operations
     equationStorage[2] = "";
 }
 
@@ -154,7 +150,6 @@ function divide() {
 }
 
 // KEYBOARD SUPPORT
-
 document.addEventListener('keydown', (event) => {
     let key = event.key;
     if (event.key >= 0) {
@@ -181,7 +176,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         displayEqual();
     }
-    if(event.key === '=') {
+    if (event.key === '=') {
         displayEqual();
     }
 })
