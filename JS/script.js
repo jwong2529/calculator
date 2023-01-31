@@ -1,5 +1,4 @@
 
-
 const numbers = document.querySelectorAll(".numbers");
 const operator = document.querySelectorAll(".operator");
 const decimal = document.querySelector(".decimal");
@@ -16,7 +15,6 @@ equationStorage[1] = undefined;
 equationStorage[2] = "";
 equationStorage[3] = "";
 currentDisplay.textContent = equationStorage[0];
-
 
 //updates current display when numbers are clicked
 numbers.forEach(num => num.addEventListener("click", function() {
