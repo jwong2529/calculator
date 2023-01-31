@@ -7,6 +7,7 @@ const currentDisplay = document.querySelector(".bottom-half");
 const acButton = document.querySelector(".AC");
 const delButton = document.querySelector(".DEL");
 const equalSign = document.querySelector(".equal-sign");
+const negativeSign = document.querySelector(".negative-sign");
 
 //default settings
 let equationStorage = [];
@@ -55,6 +56,10 @@ function updateCurrentDisplay(numbers) {
     if (numbers[0] === '0' && /[0-9]/.test(numbers[1])) {
         numbers = numbers.replace('0', "");
     }
+    //deletes leading zero if first element is a negative sign and third element is a number
+    if (numbers[0] === '-' && numbers[1] == '0' && /[0-9]/.test(numbers[2])) {
+        numbers = numbers.replace('0', "");
+    }
     currentDisplay.textContent = numbers;
 }
 
@@ -65,6 +70,7 @@ function clearCurrentDisplay() {
     equationStorage[0] = '0';
     equationStorage[1] = undefined;
     equationStorage[2] = "";
+    // equationStorage[3] = "";
     currentDisplay.textContent = 0;
     equationDisplay.textContent = "";
 }
@@ -90,6 +96,12 @@ function updateEquationDisplay() {
     if (equationStorage[2][0] === "0" && equationStorage[2][1] >= 0) {
         equationStorage[2] = equationStorage[2].replace('0', "");
     }
+    if (equationStorage[0][0] === "-" && equationStorage[0][1] === "0" && equationStorage[0][2] >= 0) {
+        equationStorage[0] = equationStorage[0].replace('0', "");
+    }
+    if (equationStorage[2][0] === "-" && equationStorage[2][1] === "0" && equationStorage[2][2] >= 0) {
+        equationStorage[2] = equationStorage[2].replace('0', "");
+    }
     equationDisplay.textContent = equationStorage[0] + ' ' + equationStorage[1] + ' ' + equationStorage[2] + ' ' + equationStorage[3];
 }
 
@@ -101,6 +113,31 @@ function displayEqual() {
     operate();
     equationStorage[3] = "";
 }
+
+//listens for when negative sign is clicked
+negativeSign.addEventListener("click", function() {
+    if (equationStorage[1] === undefined) {
+        //prevents user from inputting multiple negative signs
+        if (!equationStorage[0].includes('-')) {
+            equationStorage[0] = '-' + equationStorage[0];
+            updateCurrentDisplay(equationStorage[0]);
+        }
+        else {
+            equationStorage[0] = equationStorage[0].replace('-', "");
+            updateCurrentDisplay(equationStorage[0]);
+        }
+    }
+    else {
+        if (!equationStorage[2].includes('-')) {
+            equationStorage[2] = '-' + equationStorage[2];
+            updateCurrentDisplay(equationStorage[2]);
+        }
+        else {
+            equationStorage[2] = equationStorage[2].replace('-', "");
+            updateCurrentDisplay(equationStorage[2]);
+        }
+    }
+});
 
 //listens for when operators are clicked
 operator.forEach(op => op.addEventListener("click", function() {
